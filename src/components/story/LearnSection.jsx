@@ -73,6 +73,7 @@
 // }
 // src/components/story/LearnSection.jsx
 import { useState } from "react";
+import GameSection from "./GameSection";
 import { useNavigate } from "react-router-dom";
 
 const flashcards = [
@@ -84,54 +85,54 @@ const flashcards = [
 
 export default function LearnSection() {
   const [flipped, setFlipped] = useState(Array(flashcards.length).fill(false));
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // add navigate
 
   const toggleFlip = (index) => {
-    const updated = [...flipped];
-    updated[index] = !updated[index];
-    setFlipped(updated);
+    setFlipped(prev => {
+      const updated = [...prev];
+      updated[index] = !updated[index];
+      return updated;
+    });
   };
 
   return (
-    <main className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-tr from-pink-50 via-purple-50 to-blue-50 p-6">
-      <div className="max-w-5xl w-full">
-        <div className="bg-white/60 backdrop-blur-md rounded-3xl shadow-xl p-10 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-purple-700 mb-4 drop-shadow-md">
-            🧠 Learn Sentiments
-          </h2>
-          <p className="text-gray-700 mb-10 text-lg md:text-xl">
-            Click on each card to discover the emotion and see examples!
-          </p>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-tr from-blue-200 via-purple-200 to-pink-200 p-6">
+      <div className="max-w-4xl w-full bg-white/70 backdrop-blur-md rounded-3xl shadow-xl p-10 text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-purple-700 mb-4 drop-shadow-md">
+          🧠 Learn Sentiments
+        </h2>
+        <p className="text-gray-700 mb-8">Click on each card to discover the emotion!</p>
 
-          {/* Card Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
-            {flashcards.map((card, index) => (
-              <div
-                key={index}
-                onClick={() => toggleFlip(index)}
-                className="w-36 h-52 bg-white rounded-2xl shadow-lg flex flex-col items-center justify-center cursor-pointer transform transition-all hover:scale-105 hover:shadow-2xl"
-              >
-                {flipped[index] ? (
-                  <div className="p-3">
-                    <h3 className="text-lg font-semibold">{card.emotion}</h3>
-                    <p className="text-gray-600 text-sm mt-2">{card.example}</p>
-                  </div>
-                ) : (
-                  <span className="text-5xl">{card.emoji}</span>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Next Button */}
-          <div className="mt-12">
-            <button
-              onClick={() => navigate("/game")}
-              className="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-2xl shadow-lg transform hover:scale-105 transition"
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center">
+          {flashcards.map((card, index) => (
+            <div
+              key={index}
+              onClick={() => toggleFlip(index)}
+              className="w-36 h-52 bg-white rounded-xl shadow-md flex items-center justify-center cursor-pointer transform transition hover:scale-105 perspective"
             >
-              Next: Play Game 🎮
-            </button>
-          </div>
+              <div className={`relative w-full h-full transform-style-preserve-3d transition-transform duration-500 ${flipped[index] ? 'rotate-y-180' : ''}`}>
+                {/* Front */}
+                <div className="absolute inset-0 flex items-center justify-center backface-hidden text-4xl">
+                  {card.emoji}
+                </div>
+                {/* Back */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center backface-hidden rotate-y-180 p-2">
+                  <h3 className="text-lg font-semibold">{card.emotion}</h3>
+                  <p className="text-gray-600 text-sm mt-1">{card.example}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Next button */}
+        <div className="mt-8">
+          <button
+            onClick={() => navigate("/game")}
+            className="w-64 px-6 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-2xl shadow-lg transform hover:scale-105 transition"
+          >
+            🎮 Next: Play Game
+          </button>
         </div>
       </div>
     </main>
