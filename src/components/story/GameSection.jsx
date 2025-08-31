@@ -2,17 +2,33 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const emotions = [
-  { emoji: "😃", word: "Happy" },
-  { emoji: "😢", word: "Sad" },
   { emoji: "😡", word: "Angry" },
+  { emoji: "😢", word: "Sad" },
+  { emoji: "😃", word: "Happy" },
   { emoji: "😐", word: "Neutral" },
 ];
+
+// Helper function to shuffle an array
+const shuffleArray = (array) => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
 
 export default function GameSection() {
   const [matches, setMatches] = useState({});
   const [score, setScore] = useState(0);
   const [confetti, setConfetti] = useState(false);
+  const [shuffledWords, setShuffledWords] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Shuffle words when component mounts
+    setShuffledWords(shuffleArray(emotions.map((e) => e.word)));
+  }, []);
 
   const handleDrop = (e, emoji) => {
     const word = e.dataTransfer.getData("text");
@@ -62,16 +78,16 @@ export default function GameSection() {
             ))}
           </div>
 
-          {/* Words */}
+          {/* Words (shuffled) */}
           <div className="flex flex-col gap-6">
-            {emotions.map((item) => (
+            {shuffledWords.map((word) => (
               <div
-                key={item.word}
+                key={word}
                 className="w-32 h-14 flex items-center justify-center rounded-xl shadow-md text-lg font-bold cursor-grab bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 hover:scale-105 transform transition duration-300 active:scale-95"
                 draggable
-                onDragStart={(e) => e.dataTransfer.setData("text", item.word)}
+                onDragStart={(e) => e.dataTransfer.setData("text", word)}
               >
-                {item.word}
+                {word}
               </div>
             ))}
           </div>

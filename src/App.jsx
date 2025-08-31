@@ -3,6 +3,7 @@ import Intro from "./components/Intro";
 import StoryMode from "./components/StoryMode";
 import LearnSection from "./components/story/LearnSection";
 import GameSection from "./components/story/GameSection";
+import QuizSection from "./components/story/QuizSection";
 
 export default function App() {
   return (
@@ -13,7 +14,7 @@ export default function App() {
         <Route path="/story" element={<StoryMode />} />
         <Route path="/learn" element={<LearnSection />} />
         <Route path="/game" element={<GameSection/>} />
-        <Route path="/quiz" element={<div>📝 Quiz Section Coming Soon!</div>} />
+        <Route path="/quiz" element={<QuizSection/>} />
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
     </BrowserRouter>

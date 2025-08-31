@@ -3,21 +3,26 @@ import { useNavigate } from "react-router-dom";
 export default function StoryMode() {
   const navigate = useNavigate();
 
+  // Array of fun floating cartoon emojis
+  const floatingEmojis = ["🚀", "⭐", "❤️", "🦄", "🐶", "🐱", "🎈", "🍭"];
+
   return (
     <main className="relative min-h-screen flex items-center justify-center bg-gradient-to-tr from-pink-200 via-purple-200 to-blue-200 overflow-hidden">
       
-      {/* Floating bubbles */}
+      {/* Floating bubbles + cartoons */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
         {[...Array(12)].map((_, i) => (
           <div
             key={i}
-            className={`absolute w-12 h-12 bg-white/30 rounded-full animate-bounce-slow`}
+            className={`absolute text-3xl animate-float`}
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
               animationDuration: `${5 + Math.random() * 5}s`,
             }}
-          />
+          >
+            {floatingEmojis[Math.floor(Math.random() * floatingEmojis.length)]}
+          </div>
         ))}
       </div>
 
@@ -70,6 +75,15 @@ export default function StoryMode() {
         }
         .animate-bounce-slow {
           animation: bounce-slow infinite ease-in-out;
+        }
+
+        @keyframes float {
+          0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+          50% { transform: translateY(-30px) rotate(15deg); opacity: 1; }
+          100% { transform: translateY(0) rotate(-15deg); opacity: 0.8; }
+        }
+        .animate-float {
+          animation: float infinite ease-in-out;
         }
       `}</style>
     </main>
